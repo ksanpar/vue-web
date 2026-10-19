@@ -12,18 +12,14 @@ import CarrusImaginum from "@/components/ui/CarrusImaginum.vue";
 import { scrollToSection } from '@/utils/scrollToSection'
 import { onMounted, ref } from 'vue'
 import { Toggle } from '@/components/ui/toggle'
+import { useMouseMotio } from '@/composables/useMouseMotio'
 
  const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
-
- interface Coordinatas {
-  x: number;
-  y: number;
-}
+const {mousePositione, cumMouseMove, cumMouseLeave} = useMouseMotio()
 
 const videreMenu = ref<boolean>(true)
 
-const mousePositione = ref<Coordinatas>({ x: 0, y: 0 });
 
 const handleResize = () => {
   if (window.innerWidth >= 640) {
@@ -42,29 +38,6 @@ onMounted(() => {
 onMounted(() => {
   window.removeEventListener('resize', handleResize);
 });
-
-const cumMouseMove = (event: MouseEvent) => {
-
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    mousePositione.value = {
-       x: (centerX - mouseX) * 0.1,
-       y: (centerY - mouseY) * 0.1
-    };
-  }
-
-  const cumMouseLeave = () => {
-    mousePositione.value = {
-       x: 0, 
-       y: 0 
-    };
-  }
 
 </script>
 
