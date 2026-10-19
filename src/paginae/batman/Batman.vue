@@ -15,7 +15,15 @@ import { Toggle } from '@/components/ui/toggle'
 
  const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
+
+ interface Coordinatas {
+  x: number;
+  y: number;
+}
+
 const videreMenu = ref<boolean>(true)
+
+const mousePositione = ref<Coordinatas>({ x: 0, y: 0 });
 
 const handleResize = () => {
   if (window.innerWidth >= 640) {
@@ -30,6 +38,33 @@ onMounted(() => {
   window.addEventListener('resize', handleResize);
 })
 
+
+onMounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const cumMouseMove = (event: MouseEvent) => {
+
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    mousePositione.value = {
+       x: (centerX - mouseX) * 0.1,
+       y: (centerY - mouseY) * 0.1
+    };
+  }
+
+  const cumMouseLeave = () => {
+    mousePositione.value = {
+       x: 0, 
+       y: 0 
+    };
+  }
 
 </script>
 
@@ -90,7 +125,17 @@ onMounted(() => {
 </nav>
     <header class="titulus">
     <h1>Batman</h1>
-    <div id="titulus-batman" class="titulus-img"></div>
+    <div 
+    id="titulus-batman" 
+    class="titulus-img"
+    @mousemove="cumMouseMove"
+    @mouseleave="cumMouseLeave"
+    :style="{
+      backgroundPositionX: `calc(50% + ${mousePositione.x}px)`,
+      backgroundPositionY: `calc(50% + ${mousePositione.y}px)`,
+      transition: 'background-position 0.1s ease-out'
+    }"
+    ></div>
     <p>Él puede tomar la decisión que nadie más puede, la decisión correcta.</p>
     </header>
 
@@ -180,7 +225,7 @@ onMounted(() => {
   background-size: 100% 100%;
   background-position: center center;
   background-image: url("../imagines/batman/batman.jpg");
-  min-height: 100vh;
+  aspect-ratio: 8/7;
 }
 
 .titulus-img:hover {
@@ -189,7 +234,7 @@ onMounted(() => {
 
 .titulus > h1 {
   position: absolute;
-  top: 63%;
+  top: calc(100vw * 0.5);
   width: 100%;
   text-align: center;
   font-size: 5rem; 
@@ -200,7 +245,7 @@ onMounted(() => {
 
 .titulus > p {
   position: absolute;
-  top: 36%;
+  top: calc(100vw * 0.25);
   width: 100%;
   text-align: center;
   font-size: 2rem;
