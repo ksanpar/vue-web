@@ -22,7 +22,9 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { ref } from "vue";
 import type { DateValue } from 'reka-ui';
-import { Loader } from "@lucide/vue";
+import { Loader, Phone, Mail, MapPin, MessageCircle, X, LucideBadgeCheck } from "@lucide/vue";
+import {Icon} from "@iconify/vue";
+import { toast } from "vue-sonner";
 
 const dies = ref<DateValue>()
 const nomen = ref<string>("")
@@ -61,6 +63,25 @@ const menuItems = [
 
 const mittereSubmit = async () => {
   estLoading.value = true;
+
+  toast(`Solicitud enviada correcamente
+   - Nombre: ${nomen.value} ${cognomen.value}
+   - Misión: ${missio.value}
+   - Fecha: ${dies.value? `${dies.value.day}/${dies.value.month}/${dies.value.year}` : 'No especificada'}`, {
+    duration: 4000,
+    position: 'top-right',
+    icon: LucideBadgeCheck,
+    style: {
+      background: '#201c3b',
+      color: '#fff',
+      whiteSpace: 'pre-wrap',
+    }
+   }
+
+)
+
+
+
   await new Promise((resolve) => setTimeout(resolve, 2000));
   estLoading.value = false;
 
@@ -254,17 +275,19 @@ const mittereSubmit = async () => {
             
         <div class="space-y-2">
           <p class="flex items-center gap-2 justify-center md:justify-start">
-
+            <Phone class="h-5 w-5" />
             +1 (555) 123-4567
 
           </p>
           <p class="flex items-center gap-2 justify-center md:justify-start">
 
+            <Mail class="h-5 w-5" />
             batman@wayneenterprises.com
 
           </p>
           <p class="flex items-center gap-2 justify-center md:justify-start">
 
+            <MapPin class="h-5 w-5" />
             Wayne Manor, Gotham City
 
           </p>
@@ -276,11 +299,10 @@ const mittereSubmit = async () => {
         <h3 class="text-xl font-bold text-white">Síguenos</h3>
         <div class="flex gap-8 justify-center">
         
-          Icono de X -
-          Icono de Instagram -
-          Icono de Linkedin - 
-          Icono de MessageCircle
-              
+          <X class="h-10 w-10 hover:text-white" />
+          <Icon icon="mdi:instagram" class="h-6 w-6 hover:text-white" />
+          <Icon icon="mdi:linkedin" class="h-6 w-6 hover:text-white" />
+          <MessageCircle class="h-10 w-10 hover:text-white" />   
         </div>
     </div>
   </div>
