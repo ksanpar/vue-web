@@ -299,8 +299,8 @@ const mittereSubmit = async () => {
         <div class="flex gap-8 justify-center">
         
           <X class="h-10 w-10 hover:text-white" />
-          <Icon icon="mdi:instagram" class="h-6 w-6 hover:text-white" />
-          <Icon icon="mdi:linkedin" class="h-6 w-6 hover:text-white" />
+          <Icon icon="mdi:instagram" class="h-10 w-10 hover:text-white" />
+          <Icon icon="mdi:linkedin" class="h-10 w-10 hover:text-white" />
           <MessageCircle class="h-10 w-10 hover:text-white" />   
         </div>
     </div>
