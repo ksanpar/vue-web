@@ -20,7 +20,7 @@ import LogoSimpsons from '@/components/LogoSimpsons.vue'
       		<RouterLink to="/">Exit</RouterLink>
     	</Button>
     	<Button variant="tertiarius" size="elongatis">
-      		<RouterLink to="">Enter</RouterLink>
+      		<RouterLink to="/simpsons/about">Enter</RouterLink>
     	</Button>
 	</div>
 
