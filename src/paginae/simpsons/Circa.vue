@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 
-const imagoCirca = ref<string>()
+const imagoCirca = ref<string>('lisa.png');
 </script>
 
 <template>
