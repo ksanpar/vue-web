@@ -1,5 +1,19 @@
 <script setup lang="ts">
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { ref } from "vue";
+
+const dialogApertaEst = ref<boolean>(false)
+const quaestio = ref<string>("")
+
 </script>
 
 <template>
@@ -8,7 +22,7 @@ import { Button } from "@/components/ui/button";
 <img class="absolute opacity-20" src="/imagines/tonitrui.png"/>
 
 <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold pb-5 md:pb-20 z-10 transition-all">
-<span class="text-domus-cyan">Diseño</span>Web y
+<span class="text-domus-cyan">Diseño </span>Web y
 <br/>
 Apps <span class="text-domus-cyan">Interactivas</span>
 </h1>
@@ -18,9 +32,32 @@ Aprendiendo a crear aplicaciones web
 
 </p>
     <div class="scale-z-10">
-      <Button variant="domus" class="mr-2">
-        <RouterLink to="/indecision">Sí o No </RouterLink>
-      </Button>
+
+       <Dialog
+        :open="dialogApertaEst"
+        @update:open="dialogApertaEst = $event"
+       >
+      <DialogTrigger as-child>
+        <Button variant="domus" class="mr-2">
+          Sí o No
+        </Button>
+      </DialogTrigger>
+      <DialogContent class="sm:max-w-[425px] bg-domus-navy text-white border-domus-cyan">
+        <DialogHeader>
+          <DialogTitle class="text-white">Pregúntale</DialogTitle>
+          <DialogDescription class="text-shadow-gray-300">
+            No sigas con tus dudas, yo te responderé SÍ o NO.
+          </DialogDescription>
+        </DialogHeader>
+        <div class="mt-4">
+          <Input 
+          class="bg-domus-navy-input text-white placeholder:text-gray-400" placeholder="Escribe aquí tu pregunta..." 
+          v-model="quaestio"
+          />
+        </div>
+
+      </DialogContent>
+  </Dialog>
 
       <Button variant="domus" class="mr-2">
         <RouterLink to="/batman">Batman</RouterLink>
