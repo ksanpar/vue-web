@@ -1,7 +1,24 @@
 <script setup lang="ts">
-import { ref} from 'vue';
+import { computed, ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { characters, type Character } from './data';
+import { CheckIcon, ChevronsUpDownIcon } from '@lucide/vue'
+import { cn } from 'cn'
+import { Button } from '@/components/ui/button'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+
 
 const route= useRoute()
 const router = useRouter()
@@ -10,9 +27,76 @@ const character = ref<Character | undefined>(
   characters.find(char => char.id === Number(route.params.id))
 )
 
+const simpsons = characters.map(char => ({
+     label: char.nomen, 
+     value: char.id.toString()
+     }))
+
+
+const open = ref(false)
+const value = ref(route.params.id?.toString())
+
+watch(() => route.params.id, (newId) => {
+  value.value = newId?.toString() || '';
+  character.value = characters.find(char => char.id === Number(newId));
+});
+
+const selectCharacter = (characterId: string) => {
+  value.value = characterId;
+  open.value = false;
+    router.push(`/simpsons/gallery/${characterId}`);
+};
+
+const selectedLabel = computed(() => {
+ if (!value.value) return 'Selecciona un personaje ...'
+ return simpsons.find(simpson => simpson.value === value.value)?.label || 'Selecciona un personaje ...'
+});
+
 </script>
 
 <template>
+
+  <Popover v-model:open="open">
+    <PopoverTrigger as-child>
+      <Button
+        variant="outline"
+        role="combobox"
+        :aria-expanded="open"
+        class="w-[200px] justify-between"
+      >
+        {{
+        selectedLabel
+        }}
+        <ChevronsUpDownIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent class="w-[200px] p-0">
+      <Command>
+        <CommandInput placeholder="Search framework..." />
+        <CommandList>
+          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandGroup>
+            <CommandItem
+              v-for="simpson in simpsons"
+              :key="simpson.value"
+              :value="simpson.value"
+              @select="selectCharacter(simpson.value)"
+             
+            >
+              <CheckIcon
+                :class="cn(
+                  'mr-2 h-4 w-4',
+                  value === simpson.value ? 'opacity-100' : 'opacity-0',
+                )"
+              />
+              {{ simpson.label }}
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+  </Popover>
+
     <div 
     class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-8"
     v-if="character"
